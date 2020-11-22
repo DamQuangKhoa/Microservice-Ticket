@@ -1,6 +1,8 @@
 import express from 'express';
 import { json } from 'body-parser';
-import 'express-async-errors'
+import 'express-async-errors';
+import mongoose from 'mongoose'
+import cookieSession from 'cookie-sesssion'
 import { currentUserRouter } from './routes/current-user';
 import { signInRouter } from './routes/signin';
 import { signOutRouter } from './routes/signout';
@@ -8,7 +10,14 @@ import { signUpRouter } from './routes/signup';
 import { errorHandler } from './middlewaves/error-handler';
 import { NotFoundError } from './errors/not-found-error';
 const app = express();
+app.set('trust proxy', true)
 app.use(json());
+app.use(
+  cookieSession({
+    signed: false,
+    secure: true
+  })
+)
 
 app.use(signUpRouter)
 app.use(currentUserRouter)
@@ -20,8 +29,21 @@ app.all('*', async () => {
 })
 
 app.use(errorHandler)
+const start = async () => {
+  try {
+    await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true
+  });
+  console.log('Connect to mongodb');
+  
+  } catch (error) {
+    console.log(error);
+  }
+  app.listen(3000, () => {
+    console.log('Listening on port 3000!!!!!!');
+  });
+}
 
-
-app.listen(3000, () => {
-  console.log('Listening on port 3000!!!!!!');
-});
+start();

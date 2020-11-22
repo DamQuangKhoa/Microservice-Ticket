@@ -1,2 +1,4 @@
 node_modules
 auth/node_modules
+yarn.lock
+auth/yarn.lock
