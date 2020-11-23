@@ -2,7 +2,7 @@ import express from 'express';
 import { json } from 'body-parser';
 import 'express-async-errors';
 import mongoose from 'mongoose'
-import cookieSession from 'cookie-sesssion'
+import cookieSession from 'cookie-session'
 import { currentUserRouter } from './routes/current-user';
 import { signInRouter } from './routes/signin';
 import { signOutRouter } from './routes/signout';
@@ -30,6 +30,9 @@ app.all('*', async () => {
 
 app.use(errorHandler)
 const start = async () => {
+  if(!process.env.JWT_KEY){
+    throw new Error('JWT_KEY must be defined')
+  }
   try {
     await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {
       useNewUrlParser: true,
