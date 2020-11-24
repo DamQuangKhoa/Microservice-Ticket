@@ -35,7 +35,7 @@ router.post('/api/users/sign-in',[
         jwt: userJWT
     }
 
-    res.status(201).send(existingUser)
+    res.status(200).send(existingUser)
 })
 
 export {router as signInRouter};
