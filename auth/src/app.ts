@@ -16,7 +16,7 @@ app.use(
         signed: false,
         secure: process.env.NODE_ENV !== 'test' // if test > false
     })
-)
+) //
 
 app.use(signUpRouter)
 app.use(currentUserRouter)
