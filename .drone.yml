@@ -1,9 +1,7 @@
-kind: pipeline
-name: default
-
-steps:
-  - name: test
+pipeline:
+  tests:
     image: node
     commands:
+      - cd auth
       - npm install
       - npm test
