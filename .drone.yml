@@ -1,7 +1,0 @@
-pipeline:
-  tests:
-    image: node
-    commands:
-      - cd auth
-      - npm install
-      # - CI=true npm test
