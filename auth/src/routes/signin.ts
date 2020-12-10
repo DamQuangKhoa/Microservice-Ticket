@@ -1,8 +1,7 @@
 import express, {Request, Response} from 'express'
 import jwt from 'jsonwebtoken'
 import { body} from 'express-validator';
-import { BadRequestError } from '../errors/bad-request-error';
-import { vallidateRequest } from '../middlewaves/validate-request';
+import { vallidateRequest, BadRequestError } from '@tedvntickets/common';
 import { User } from '../models/user';
 import { Password } from '../services/password';
 const router = express.Router();

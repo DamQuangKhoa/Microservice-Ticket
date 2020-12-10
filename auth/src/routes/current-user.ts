@@ -1,8 +1,5 @@
+import { currentUser } from '@tedvntickets/common';
 import express from 'express'
-import jwt from 'jsonwebtoken'
-import { currentUser } from '../middlewaves/current-user';
-
-
 const router = express.Router();
 
 router.get('/api/users/currentuser', currentUser, (req, res) => {
