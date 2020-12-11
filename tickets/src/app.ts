@@ -2,7 +2,8 @@ import express from 'express';
 import { json } from 'body-parser';
 import 'express-async-errors';
 import cookieSession from 'cookie-session'
-import { errorHandler, NotFoundError } from '@tedvntickets/common';
+import { errorHandler, NotFoundError, currentUser } from '@tedvntickets/common';
+import { createTicketRouter } from './routes/new';
 const app = express();
 app.set('trust proxy', true)
 app.use(json());
@@ -11,8 +12,9 @@ app.use(
         signed: false,
         secure: process.env.NODE_ENV !== 'test' // if test > false
     })
-) 
-
+); 
+app.use(currentUser);
+app.use(createTicketRouter);
 
 app.all('*', async () => {
     throw new NotFoundError()
