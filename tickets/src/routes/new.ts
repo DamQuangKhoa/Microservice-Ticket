@@ -18,8 +18,8 @@ async (req: Request, res: Response) => {
         price,
         userId: req.currentUser!.id
     })
-    await ticket.save()
-    res.sendStatus(201).send(ticket);
+    await ticket.save();
+    res.status(201).send(ticket);
 })
 
 export { router as createTicketRouter } 

@@ -1,14 +1,15 @@
 import request from 'supertest';
 import {app} from '../../app';
 import { Ticket } from '../../models/ticket';
-
+import mongoose from 'mongoose'
 
 it('has a route handler listening to /api/tickets for post request', async () => {
-    const response = await request(app)
-    .post('/api/tickets')
+    const id = new mongoose.Types.ObjectId().toHexString();
+    await request(app)
+    .post(`/api/tickets/${id}`)
     .send({})
+    .expect(404)
 
-    expect(response.status).not.toEqual(404);
 })
 it('can only be accessed if the user is signed in ', async () => {
     await request(app)
@@ -78,4 +79,20 @@ it('creates a ticket with valid inputs', async () => {
     expect(tickets.length).toEqual(1);
     expect(tickets[0].price).toEqual(20);
     
+})
+it('returns the ticket if the ticket is found', async () => {
+    const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', global.signin())
+    .send({
+        title: 'abacs',
+        price: 20
+    })
+    .expect(201)
+
+    await request(app)
+    .get(`/api/tickets/${response.body.id}`)
+    .send()
+    .expect(200)
+
 })
