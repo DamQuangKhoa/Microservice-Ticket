@@ -1,7 +1,8 @@
 import request from 'supertest';
 import {app} from '../../app';
 import { Ticket } from '../../models/ticket';
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('has a route handler listening to /api/tickets for post request', async () => {
     const id = new mongoose.Types.ObjectId().toHexString();
@@ -94,5 +95,22 @@ it('returns the ticket if the ticket is found', async () => {
     .get(`/api/tickets/${response.body.id}`)
     .send()
     .expect(200)
+})
 
+it('publishes an event', async () => {
+    const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', global.signin())
+    .send({
+        title: 'abacs',
+        price: 20
+    })
+    .expect(201)
+
+    await request(app)
+    .get(`/api/tickets/${response.body.id}`)
+    .send()
+    .expect(200)
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
 })

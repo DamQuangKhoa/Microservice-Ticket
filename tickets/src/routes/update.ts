@@ -1,10 +1,10 @@
 import { NotAuthorizedError, NotFoundError, requireAuth, vallidateRequest } from '@tedvntickets/common';
 import express, {Request, Response} from 'express';
 import { body } from 'express-validator';
+import { natsWrapper } from '../nats-wrapper';
+import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
 import { Ticket } from '../models/ticket';
-
 const router = express.Router();
-
 
 router.put('/api/tickets/:id', requireAuth, 
 [
@@ -30,6 +30,12 @@ async (req: Request, res: Response) => {
         price: req.body.price
     });
     await ticket.save();
+    await new TicketUpdatedPublisher(natsWrapper.client).publish({
+        id: ticket.id!,
+        title: ticket.title!,
+        price: ticket.price!,
+        userId: ticket.userId!
+    })
     res.status(200).send(ticket);
 })
 
