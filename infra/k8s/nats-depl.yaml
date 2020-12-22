@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   name: nats-depl
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: nats
-  replicas: 1
   template:
     metadata:
       labels:
@@ -41,10 +41,10 @@ spec:
     app: nats
   ports:
     - name: client
+      protocol: TCP
       port: 4222
       targetPort: 4222
+    - name: monitoring
       protocol: TCP
-    - name: mornitoring
       port: 8222
       targetPort: 8222
-      protocol: TCP
