@@ -6,8 +6,7 @@ import { currentUserRouter } from './routes/current-user';
 import { signInRouter } from './routes/signin';
 import { signOutRouter } from './routes/signout';
 import { signUpRouter } from './routes/signup';
-import { errorHandler } from './middlewaves/error-handler';
-import { NotFoundError } from './errors/not-found-error';
+import { errorHandler, NotFoundError } from '@tedvntickets/common';
 const app = express();
 app.set('trust proxy', true)
 app.use(json());
@@ -16,7 +15,7 @@ app.use(
         signed: false,
         secure: process.env.NODE_ENV !== 'test' // if test > false
     })
-)
+) //
 
 app.use(signUpRouter)
 app.use(currentUserRouter)
