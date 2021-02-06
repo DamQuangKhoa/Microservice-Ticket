@@ -1,4 +1,4 @@
-import { NotAuthorizedError, NotFoundError, requireAuth, vallidateRequest } from '@tedvntickets/common';
+import { NotAuthorizedError, NotFoundError, requireAuth, validateRequest } from '@tedvntickets/common';
 import express, {Request, Response} from 'express';
 import { body } from 'express-validator';
 import { natsWrapper } from '../nats-wrapper';
@@ -14,7 +14,7 @@ router.put('/api/tickets/:id', requireAuth,
     .withMessage('Title is required'),
     body('price').isFloat({ gt: 0 }).withMessage('Price must be greater than 0')
 ],
-vallidateRequest,
+validateRequest,
 async (req: Request, res: Response) => {
     const ticket = await Ticket.findById(req.params.id);
 

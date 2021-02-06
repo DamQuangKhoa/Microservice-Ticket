@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { body} from 'express-validator';
 import { User } from '../models/user';
-import { vallidateRequest, BadRequestError } from '@tedvntickets/common';
+import { validateRequest, BadRequestError } from '@tedvntickets/common';
 const router = express.Router();
 
 router.post('/api/users/signup', [
@@ -13,7 +13,7 @@ router.post('/api/users/signup', [
         .trim()
         .isLength({min: 4, max: 20})
         .withMessage('Password must be between 4 and 20 characters')
-],vallidateRequest , async (req: Request, res: Response ) => {
+],validateRequest , async (req: Request, res: Response ) => {
     
     const { email, password } = req.body
 

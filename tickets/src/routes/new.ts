@@ -1,4 +1,4 @@
-import { requireAuth, vallidateRequest } from '@tedvntickets/common';
+import { requireAuth, validateRequest } from '@tedvntickets/common';
 import express, {Request, Response} from 'express'
 import { body } from 'express-validator';
 import { natsWrapper } from '../nats-wrapper';
@@ -11,7 +11,7 @@ router.post('/api/tickets', requireAuth, [
     .isEmpty()
     .withMessage('Title is required'),
     body('price').isFloat({ gt: 0 }).withMessage('Price must be greater than 0')
-], vallidateRequest,
+], validateRequest,
 async (req: Request, res: Response) => {
     const { title, price } = req.body;
 
