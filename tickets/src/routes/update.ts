@@ -1,4 +1,4 @@
-import { NotAuthorizedError, NotFoundError, requireAuth, validateRequest } from '@tedvntickets/common';
+import { BadRequestError, NotAuthorizedError, NotFoundError, requireAuth, validateRequest } from '@tedvntickets/common';
 import express, {Request, Response} from 'express';
 import { body } from 'express-validator';
 import { natsWrapper } from '../nats-wrapper';
@@ -20,6 +20,10 @@ async (req: Request, res: Response) => {
 
     if(!ticket){
         throw new NotFoundError();
+    }
+
+    if(ticket.orderId) {
+        throw new BadRequestError('Can not edit a reserved ticket');
     }
 
     if(ticket.userId !== req.currentUser!.id){

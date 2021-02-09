@@ -1,29 +1,28 @@
-import { OrderCreatedEvent, OrderStatus } from "@tedvntickets/common";
+import { OrderCancelledEvent } from "@tedvntickets/common";
 import { Message } from "node-nats-streaming";
 import { Ticket } from "../../../models/ticket";
 import { natsWrapper } from "../../../nats-wrapper"
-import { OrderCreatedListener } from "../order-created-listener"
+import { OrderCancelledListener } from "../order-cancelled-listener";
+import mongoose from 'mongoose'
 
 const setUp = async () => {
     // Create an instance of the listener
-    const listener = new OrderCreatedListener(natsWrapper.client);
+    const listener = new OrderCancelledListener(natsWrapper.client);
     // Create and save a ticket
+    const orderId = mongoose.Types.ObjectId().toHexString();
     const ticket = Ticket.build({
         title: 'abc',
         price: 99,
         userId: 'abc'
     });
+    ticket.set({ orderId })
     await ticket.save();
     // Create the fake data event
-    const data: OrderCreatedEvent['data'] = {
+    const data: OrderCancelledEvent['data'] = {
         id: 'abc',
-        status: OrderStatus.AwaitingPayment,
-        userId: 'abc',
-        expiresAt: 'abcdasd',
         version: 0,
         ticket: {
             id: ticket.id,
-            price: ticket.price
         }
     }
     // Create the fake message object
@@ -40,7 +39,7 @@ it('sets the userId of the ticket', async () => {
 
     const updatedTicket = await Ticket.findById(ticket.id);
 
-    expect(updatedTicket!.orderId).toEqual(data.id);
+    expect(updatedTicket!.orderId).not.toBeDefined();
 })
 
 it('acks the message', async () => {

@@ -1,22 +1,22 @@
-import { Listener, Subjects, OrderCreatedEvent } from "@tedvntickets/common";
+import { Listener, Subjects, OrderCancelledEvent } from "@tedvntickets/common";
 import { Message } from "node-nats-streaming";
 import { Ticket } from "../../models/ticket";
 import { TicketUpdatedPublisher } from "../publishers/ticket-updated-publisher";
 import { queueGroupName } from "./queue-group-name";
 
 
-export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
-    subject: Subjects.OrderCreated = Subjects.OrderCreated;
+export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
+    subject: Subjects.OrderCancelled = Subjects.OrderCancelled;
     queueGroupName = queueGroupName;
 
-    async onMessage(data: OrderCreatedEvent['data'], msg: Message){
+    async onMessage(data: OrderCancelledEvent['data'], msg: Message){
         // Find the Ticket
         const ticket = await Ticket.findById(data.ticket.id);
         // If no ticket found, throw an error
         if(!ticket) throw new Error('Ticket not found')
         // Mark the ticket as being reserved by setting its orderId property
         ticket.set({
-            orderId: data.id
+            orderId: undefined
         });
 
         // Save the ticket
