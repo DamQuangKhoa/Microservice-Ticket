@@ -13,7 +13,7 @@ it('return a 404 if the provided id does not exist', async () => {
         title: 'aasddssd',
         price: 20
     })
-    .expect(404);
+    .expect(400);
 
 })
 it('return a 401 if the user is not authenticated', async () => {
