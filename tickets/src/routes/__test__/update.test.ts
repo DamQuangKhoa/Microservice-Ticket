@@ -7,7 +7,7 @@ import { Ticket } from '../../models/ticket';
 it('return a 404 if the provided id does not exist', async () => {
     const id = new mongoose.Types.ObjectId().toHexString();
     await request(app)
-    .put(`api/tickets/1asdas`)
+    .put(`/api/tickets/1asdas`)
     .set('Cookie', global.signin())
     .send({
         title: 'aasddssd',
