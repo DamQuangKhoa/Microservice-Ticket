@@ -1,5 +1,5 @@
 node_modules
-auth/node_modules
+.DS_Store
 yarn.lock
-auth/yarn.lock
+*/yarn.lock
 .idea/
