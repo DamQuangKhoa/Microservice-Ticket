@@ -5,7 +5,7 @@ import { app } from '../../app';
 it('responds with detail about user', async () => {
     const cookie = await global.signin()
     const response = await request(app)
-            .get('/api/users/current-user')
+            .get('/api/users/currentuser')
             .set('Cookie', cookie)
             .send()
             .expect(200)
